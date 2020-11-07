@@ -1,22 +1,19 @@
 {
   "name": "emoji-widget",
   "version": "0.0.1",
-  "dependencies": {
-
-  },
+  "dependencies": {},
   "devDependencies": {
-    "less": "^3.12.2",
+    "stylus": "^0.54.8",
     "webpack": "^5.4.0",
     "webpack-cli": "^4.2.0",
     "webpack-dev-server": "^3.11.0",
     "html-webpack-plugin": "^4.5.0",
     "style-loader": "^2.0.0",
     "css-loader": "^5.0.1",
-    "less-loader": "^7.0.2"
+    "stylus-loader": "^4.2.0"
   },
   "scripts": {
     "start": "npm run build && npm run serve",
-    "compile-styles": "lessc src/styles/index.less src/styles/index.css",
     "build": "webpack",
     "serve": "webpack serve"
   }

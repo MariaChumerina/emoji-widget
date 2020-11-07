@@ -12,11 +12,11 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.less$/,
+                test: /\.styl$/,
                 use: [
                     'style-loader',
                     'css-loader',
-                    'less-loader'
+                    'stylus-loader'
                 ],
             },
         ],
