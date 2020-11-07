@@ -1,4 +1,9 @@
 # Dependency directories
 node_modules/
 
+# Dist
+dist
+
+# IDE
 .idea
+
