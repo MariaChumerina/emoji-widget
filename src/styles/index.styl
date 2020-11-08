@@ -35,6 +35,10 @@
     cursor: pointer;
 }
 
+.widget-button:focus {
+    outline: none;
+}
+
 .widget-button:hover {
     opacity: 1;
 }
@@ -43,4 +47,14 @@
     position: absolute;
     right: ($inputVerticalPadding / 2);
     top: ($inputVerticalPadding / 2);
+}
+
+.widget {
+    position: absolute;
+    bottom: -25px;
+}
+
+.widget-hidden {
+    display: none;
+    transition: opacity 150ms ease-in-out,visibility 150ms ease-in-out 150ms;
 }
