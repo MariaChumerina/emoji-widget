@@ -1,8 +1,63 @@
 @import "colors.styl";
+@import "sizes.styl";
 
-.text-field {
+.input-block {
     width: 400px;
+    margin: 8px 0;
+    position: relative;
 }
+
+.input-field {
+    width: 100%;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-top: $inputVerticalPadding;
+    padding-bottom: $inputVerticalPadding;
+    padding-left: $inputHorizontalPadding;
+    padding-right: ($inputHorizontalPadding + $emojiSize);
+}
+
 .widget {
     background: $backgroundColor;
+}
+
+.widget-button {
+    background: url('../images/main-emodji.svg');
+    background-repeat: no-repeat;
+    background-size: $emojiSize $emojiSize;
+    height: $emojiSize;
+    width: $emojiSize;
+    opacity: .6;
+    border: none;
+    font-size: $emojiSize;
+    cursor: pointer;
+}
+
+.widget-button:focus {
+    outline: none;
+}
+
+.widget-button:hover {
+    opacity: 1;
+}
+
+.widget-button-position {
+    position: absolute;
+    right: ($inputVerticalPadding / 2);
+    top: ($inputVerticalPadding / 2);
+}
+
+.widget {
+    position: absolute;
+    bottom: -25px;
+}
+
+.widget-hidden {
+    display: none;
+    transition: opacity 150ms ease-in-out,visibility 150ms ease-in-out 150ms;
 }
