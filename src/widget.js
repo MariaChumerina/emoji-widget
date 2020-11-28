@@ -1,43 +1,53 @@
 import emojiData from './data/emojis';
+import categoriesData from './data/categories';
 
-const emojiContent = emojiData.emojis.map(e => e.html);
+export class Widget {
+    constructor() {
+        this.emojiList = emojiData.emojis;
+        this.categoriesData = categoriesData;
 
-const categories = [
-    'recent',
-    'smiles',
-    'animals',
-    'food',
-    'activity',
-    'travel',
-    'objects',
-    'symbols',
-    'flags',
-];
+        this.initTabs();
+        this.showPageByCategory(1);
+    }
 
-export default function initWidget() {
-    console.log(emojiContent);
-    initTabs();
-    showEmojiPage(emojiContent);
-}
+    initTabs() {
+        const widgetTabsEl = document.getElementById('widgetTabs');
 
-function initTabs() {
-    const widgetTabsEl = document.getElementById('widgetTabs');
+        Object.keys(this.categoriesData).forEach((categoryId, index) => {
+            const { title } = this.categoriesData[categoryId];
+            const tabButtonEl = document.createElement('button');
 
-    categories.forEach(category => {
-        const tabButtonEl = document.createElement('button');
+            tabButtonEl.setAttribute('title', title);
+            tabButtonEl.classList.add('tab-item');
+            tabButtonEl.innerHTML = require(`./images/categories/cat-${categoryId}.svg`);
+            tabButtonEl.addEventListener('click', () => {
+                this.showPageByCategory(Number(categoryId));
+            });
 
-        tabButtonEl.classList.add('tab-item', `cat-${category}`);
-        widgetTabsEl.appendChild(tabButtonEl);
-    });
-}
+            widgetTabsEl.appendChild(tabButtonEl);
+        });
+        this.widgetButtonElList = document.querySelectorAll('#widgetTabs .tab-item');
+    }
 
-function showEmojiPage(emojiList) {
-    const emojiContainerEl = document.getElementById('emojiContainer');
+    setSelectedCategory(index) {
+        this.widgetButtonElList.forEach(el => el.classList.remove('selected'));
+        this.widgetButtonElList[index].classList.add('selected');
+    }
 
-    emojiList.forEach(emoji => {
-        const emojiEl = document.createElement('span');
+    showPageByCategory(categoryId) {
+        const index = Object.keys(this.categoriesData).indexOf(categoryId.toString());
+        const emojiListContent = this.emojiList.filter(e => e.category === categoryId);
+        const emojiContainerEl = document.getElementById('emojiContainer');
 
-        emojiEl.innerHTML = emoji;
-        emojiContainerEl.appendChild(emojiEl);
-    });
+        emojiContainerEl.innerHTML = '';
+        emojiListContent.forEach(emoji => {
+            const emojiEl = document.createElement('span');
+
+            emojiEl.innerHTML = emoji.html;
+            emojiEl.setAttribute('title', emoji.name);
+            emojiContainerEl.appendChild(emojiEl);
+        });
+
+        this.setSelectedCategory(index);
+    }
 }

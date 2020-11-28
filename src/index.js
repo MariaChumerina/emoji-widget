@@ -1,5 +1,5 @@
 import './styles/index.styl';
-import initWidget from "./widget";
+import { Widget } from "./widget";
 
 const widgetButton = document.getElementById('widget-button');
 const widgetContent = document.getElementById('widget-content');
@@ -7,7 +7,7 @@ const widgetContent = document.getElementById('widget-content');
 widgetButton.onclick = function () {
     setWidgetVisibility();
 };
-initWidget();
+const widget = new Widget();
 
 function setWidgetVisibility() {
     const hiddenWidgetClass = 'widget-hidden';

@@ -1,0 +1,34 @@
+{
+  "1": {
+    "name": "smiles",
+    "title": "Smileys & People"
+  },
+  "2": {
+    "name": "animals",
+    "title": "Animals & Nature"
+  },
+  "3": {
+    "name": "food",
+    "title": "Food & Drink"
+  },
+  "4": {
+    "name": "activity",
+    "title": "Activities"
+  },
+  "5": {
+    "name": "travel",
+    "title": "Travel & Places"
+  },
+  "6": {
+    "name": "objects",
+    "title": "Objects"
+  },
+  "7": {
+    "name": "symbols",
+    "title": "Symbols"
+  },
+  "8": {
+    "name": "flags",
+    "title": "Flags"
+  }
+}

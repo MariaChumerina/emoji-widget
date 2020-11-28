@@ -1,6 +1,5 @@
 @import "colors.styl";
 @import "sizes.styl";
-@import "emoji-categories.styl";
 
 .input-block {
     width: 800px;
@@ -71,7 +70,7 @@
         margin-bottom: 12px;
 
         .tab-item {
-            width: 20px;
+            width: 32px;
             height: 20px;
             opacity: .7;
             border: none;
@@ -80,6 +79,10 @@
 
             &:hover {
                 opacity: 0.4;
+            }
+
+            &.selected > svg {
+                fill: $accentColor;
             }
         }
     }
