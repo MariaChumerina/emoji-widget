@@ -1,3 +1,7 @@
+import emojiData from './data/emojis';
+
+const emojiContent = emojiData.emojis.map(e => e.html);
+
 const categories = [
     'recent',
     'smiles',
@@ -10,7 +14,13 @@ const categories = [
     'flags',
 ];
 
-export function initTabs() {
+export default function initWidget() {
+    console.log(emojiContent);
+    initTabs();
+    showEmojiPage(emojiContent);
+}
+
+function initTabs() {
     const widgetTabsEl = document.getElementById('widgetTabs');
 
     categories.forEach(category => {
@@ -21,13 +31,13 @@ export function initTabs() {
     });
 }
 
-export function showEmojiPage(emojiList) {
+function showEmojiPage(emojiList) {
     const emojiContainerEl = document.getElementById('emojiContainer');
 
     emojiList.forEach(emoji => {
         const emojiEl = document.createElement('span');
 
-        emojiEl.textContent = String.fromCodePoint(emoji);
+        emojiEl.innerHTML = emoji;
         emojiContainerEl.appendChild(emojiEl);
     });
 }
