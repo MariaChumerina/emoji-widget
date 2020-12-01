@@ -1,12 +1,30 @@
 export class Widget {
     constructor(config = {}) {
         const { data, categories } = config;
-        this.emojiList = data || import('./data/emojis').emojis;
-        this.categoriesData = categories || import('./data/categories');
 
+        if (data && categories) {
+            this.emojiList = data;
+            this.categoriesData = categories;
+
+            this.init();
+        } else {
+            Promise.all([
+                import('./data/emojis'),
+                import('./data/categories')
+            ]).then(([ data, categoriesData ]) => {
+                this.emojiList = data.emojis;
+                this.categoriesData = categoriesData.default;
+
+                this.init();
+            });
+        }
+    }
+
+    init() {
         const DEFAULT_CATEGORY = Object.keys(this.categoriesData)[0];
+
         this.initTabs();
-        this.showPageByCategory(DEFAULT_CATEGORY);
+        this.showPageByCategory(Number(DEFAULT_CATEGORY));
     }
 
     initTabs() {
