@@ -1,13 +1,12 @@
-import emojiData from './data/emojis';
-import categoriesData from './data/categories';
-
 export class Widget {
-    constructor() {
-        this.emojiList = emojiData.emojis;
-        this.categoriesData = categoriesData;
+    constructor(config = {}) {
+        const { data, categories } = config;
+        this.emojiList = data || import('./data/emojis').emojis;
+        this.categoriesData = categories || import('./data/categories');
 
+        const DEFAULT_CATEGORY = Object.keys(this.categoriesData)[0];
         this.initTabs();
-        this.showPageByCategory(1);
+        this.showPageByCategory(DEFAULT_CATEGORY);
     }
 
     initTabs() {
