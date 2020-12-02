@@ -55,6 +55,7 @@ export class Widget {
         const index = Object.keys(this.categoriesData).indexOf(categoryId.toString());
         const emojiListContent = this.emojiList.filter(e => e.category === categoryId);
         const emojiContainerEl = document.getElementById('emojiContainer');
+        const input = document.getElementById('input-field');
 
         emojiContainerEl.innerHTML = '';
         emojiListContent.forEach(emoji => {
@@ -62,8 +63,12 @@ export class Widget {
 
             emojiEl.innerHTML = emoji.html;
             emojiEl.setAttribute('title', emoji.name);
+            emojiEl.addEventListener('click', () => {
+                input.value = input.value += emoji.emoji;
+            });
             emojiContainerEl.appendChild(emojiEl);
         });
+
 
         this.setSelectedCategory(index);
     }
