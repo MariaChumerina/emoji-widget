@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: './src/index.js',
+    devtool: 'source-map',
     devServer: {
         contentBase: './dist',
         compress: true,
@@ -21,6 +22,9 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|svg)$/i,
+                exclude: [
+                    path.resolve(__dirname, 'src/images/categories')
+                ],
                 use: [
                     {
                         loader: 'url-loader',
@@ -29,6 +33,13 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.(svg)$/i,
+                include: [
+                    path.resolve(__dirname, 'src/images/categories')
+                ],
+                use: 'svg-inline-loader',
             },
         ],
     },
@@ -40,6 +51,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/index.html',
             title: 'Emoji Widget',
-        }),
+        })
     ],
 };
