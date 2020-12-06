@@ -1,12 +1,12 @@
 export class Widget {
-    constructor(config = {}) {
+    constructor(inputEl, config = {}) {
         const { data, categories } = config;
 
         if (data && categories) {
             this.emojiList = data;
             this.categoriesData = categories;
 
-            this.init();
+            this.renderAfter(inputEl);
         } else {
             Promise.all([
                 import('./data/emojis'),
@@ -15,16 +15,57 @@ export class Widget {
                 this.emojiList = data.emojis;
                 this.categoriesData = categoriesData.default;
 
-                this.init();
+                this.renderAfter(inputEl);
             });
         }
+    }
+
+    renderAfter(referenceElement) {
+        const mainEl = document.createElement('article');
+
+        mainEl.innerHTML = `
+            <button type="button" class="widget-button widget-button-position" id="widget-button">
+            </button>
+            <div class="widget widget-hidden" id="widget-content">
+                <nav class="widget-navigation">
+                    <div class="widget-tabs" id="widgetTabs"></div>
+                    <div class="search-field">
+                        <input class="search-input" placeholder="Поиск Emoji">
+                        <button class="search-button"></button>
+                    </div>
+                </nav>
+                <div class="emoji-container" id="emojiContainer"></div>
+            </div>
+        `;
+        referenceElement.parentNode.insertBefore(mainEl, referenceElement.nextSibling);
+
+        this.init();
     }
 
     init() {
         const DEFAULT_CATEGORY = Object.keys(this.categoriesData)[0];
 
+        this.initWidgetVisibility();
         this.initTabs();
         this.showPageByCategory(Number(DEFAULT_CATEGORY));
+    }
+
+    initWidgetVisibility() {
+        const widgetButton = document.getElementById('widget-button');
+        const widgetContent = document.getElementById('widget-content');
+
+        widgetButton.onclick = function () {
+            setWidgetVisibility();
+        };
+
+        function setWidgetVisibility() {
+            const hiddenWidgetClass = 'widget-hidden';
+            if (widgetContent.classList.contains(hiddenWidgetClass)) {
+                widgetContent.classList.remove(hiddenWidgetClass);
+            } else {
+                widgetContent.classList.add(hiddenWidgetClass);
+            }
+        }
     }
 
     initTabs() {
