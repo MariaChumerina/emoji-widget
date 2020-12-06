@@ -51,6 +51,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/index.html',
             title: 'Emoji Widget',
+            favicon: './src/images/favicon.ico'
         })
     ],
 };
