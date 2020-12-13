@@ -17,6 +17,16 @@ module.exports = {
                 use: [
                     'style-loader',
                     'css-loader',
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [ "autoprefixer" ],
+                                ],
+                            },
+                        },
+                    },
                     'stylus-loader'
                 ],
             },
@@ -52,6 +62,6 @@ module.exports = {
             template: './src/index.html',
             title: 'Emoji Widget',
             favicon: './src/images/favicon.ico'
-        })
+        }),
     ],
 };

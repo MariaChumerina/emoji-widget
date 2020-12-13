@@ -1,23 +1,27 @@
 export class Widget {
-    constructor(inputEl, config = {}) {
-        this.inputEl = inputEl;
-        const { data, categories } = config;
-        if (data && categories) {
-            this.emojiList = data;
-            this.categoriesData = categories;
+    create(inputEl, config = {}) {
+        return new Promise((resolve, reject) => {
+            this.inputEl = inputEl;
+            const { data, categories } = config;
+            if (data && categories) {
+                this.emojiList = data;
+                this.categoriesData = categories;
 
-            this.renderAfter();
-        } else {
-            Promise.all([
-                import('./data/emojis'),
-                import('./data/categories')
-            ]).then(([ data, categoriesData ]) => {
-                this.emojiList = data.emojis;
-                this.categoriesData = categoriesData.default;
+                resolve(this.renderAfter());
+            } else {
+                Promise.all([
+                    import('./data/emojis'),
+                    import('./data/categories')
+                ])
+                .then(([ data, categoriesData ]) => {
+                    this.emojiList = data.emojis;
+                    this.categoriesData = categoriesData.default;
 
-                this.renderAfter();
-            });
-        }
+                    resolve(this.renderAfter());
+                })
+                .catch(reject)
+            }
+        });
     }
 
     renderAfter() {
@@ -40,6 +44,8 @@ export class Widget {
         this.inputEl.parentNode.insertBefore(mainEl, this.inputEl.nextSibling);
 
         this.init();
+
+        return mainEl;
     }
 
     init() {
@@ -54,17 +60,11 @@ export class Widget {
         const widgetButton = document.getElementById('widget-button');
         const widgetContent = document.getElementById('widget-content');
 
-        widgetButton.onclick = function () {
-            setWidgetVisibility();
-        };
+        widgetButton.addEventListener('click', setWidgetVisibility);
 
         function setWidgetVisibility() {
             const hiddenWidgetClass = 'widget-hidden';
-            if (widgetContent.classList.contains(hiddenWidgetClass)) {
-                widgetContent.classList.remove(hiddenWidgetClass);
-            } else {
-                widgetContent.classList.add(hiddenWidgetClass);
-            }
+            widgetContent.classList.toggle(hiddenWidgetClass);
         }
     }
 
@@ -82,6 +82,7 @@ export class Widget {
                 this.showPageByCategory(Number(categoryId));
             });
 
+            tabButtonEl.querySelector('svg').classList.add('tab-icon');
             widgetTabsEl.appendChild(tabButtonEl);
         });
         this.widgetButtonElList = document.querySelectorAll('#widgetTabs .tab-item');
@@ -98,13 +99,14 @@ export class Widget {
         const emojiContainerEl = document.getElementById('emojiContainer');
 
         emojiContainerEl.innerHTML = '';
-        emojiListContent.forEach(emoji => {
-            const emojiEl = document.createElement('span');
+        emojiListContent.forEach(emojiItem => {
+            const emojiEl = document.createElement('button');
+            emojiEl.classList.add('emoji-button');
 
-            emojiEl.innerHTML = emoji.html;
-            emojiEl.setAttribute('title', emoji.name);
+            emojiEl.innerHTML = emojiItem.html;
+            emojiEl.setAttribute('title', emojiItem.name);
             emojiEl.addEventListener('click', () => {
-               this.inputEl.value += emoji.emoji;
+               this.inputEl.value += emojiItem.emoji;
             });
             emojiContainerEl.appendChild(emojiEl);
         });
