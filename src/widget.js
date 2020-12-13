@@ -1,12 +1,12 @@
 export class Widget {
     constructor(inputEl, config = {}) {
+        this.inputEl = inputEl;
         const { data, categories } = config;
-
         if (data && categories) {
             this.emojiList = data;
             this.categoriesData = categories;
 
-            this.renderAfter(inputEl);
+            this.renderAfter();
         } else {
             Promise.all([
                 import('./data/emojis'),
@@ -15,12 +15,12 @@ export class Widget {
                 this.emojiList = data.emojis;
                 this.categoriesData = categoriesData.default;
 
-                this.renderAfter(inputEl);
+                this.renderAfter();
             });
         }
     }
 
-    renderAfter(referenceElement) {
+    renderAfter() {
         const mainEl = document.createElement('article');
 
         mainEl.innerHTML = `
@@ -37,7 +37,7 @@ export class Widget {
                 <div class="emoji-container" id="emojiContainer"></div>
             </div>
         `;
-        referenceElement.parentNode.insertBefore(mainEl, referenceElement.nextSibling);
+        this.inputEl.parentNode.insertBefore(mainEl, this.inputEl.nextSibling);
 
         this.init();
     }
@@ -103,6 +103,9 @@ export class Widget {
 
             emojiEl.innerHTML = emoji.html;
             emojiEl.setAttribute('title', emoji.name);
+            emojiEl.addEventListener('click', () => {
+               this.inputEl.value += emoji.emoji;
+            });
             emojiContainerEl.appendChild(emojiEl);
         });
 
