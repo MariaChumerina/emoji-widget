@@ -3,19 +3,17 @@ import './styles/theming.css';
 
 export class Widget {
 
-    create(inputEl, config = { darkMode: true }) {
+    create(inputEl, config = { darkMode: false }) {
         return new Promise((resolve, reject) => {
-            this.inputEl = inputEl;
             const { data, categories, theming, darkMode } = config;
-            const theme = darkMode ? 'dark': 'light';
+            this.inputEl = inputEl;
+            this.theme = darkMode ? 'dark': 'light';
 
             if (theming) {
                 this.theming = theming;
-                this.setTheme(theme);
             } else {
                 import('./data/theming').then(res => {
                     this.theming = res.default;
-                    this.setTheme(theme);
                 });
             }
 
@@ -23,7 +21,7 @@ export class Widget {
                 this.emojiList = data;
                 this.categoriesData = categories;
 
-                resolve(this.renderAfter());
+                resolve(this.render());
             } else {
                 Promise.all([
                     import('./data/emojis'),
@@ -33,7 +31,7 @@ export class Widget {
                     this.emojiList = data.emojis;
                     this.categoriesData = categoriesData.default;
 
-                    resolve(this.renderAfter());
+                    resolve(this.render());
                 })
                 .catch(reject)
             }
@@ -42,21 +40,23 @@ export class Widget {
 
     setTheme(theme) {
         const selectedTheme = this.theming[theme];
-        const root = document.documentElement;
 
         if (selectedTheme) {
             Object.keys(selectedTheme).forEach(themeVar => {
-                root.style.setProperty(themeVar, selectedTheme[themeVar]);
+                this.mainEl.style.setProperty(themeVar, selectedTheme[themeVar]);
             });
         }
     }
 
-    renderAfter() {
-        const mainEl = document.createElement('article');
+    render() {
+        this.mainEl = document.createElement('article');
+        const buttonEl = document.createElement('button');
 
-        mainEl.innerHTML = `
-            <button type="button" class="widget-button widget-button-position" id="widget-button">
-            </button>
+        this.mainEl.classList.add('widget-container');
+        buttonEl.classList.add('widget-button', 'widget-button-position');
+        buttonEl.setAttribute('id', 'widget-button');
+
+        this.mainEl.innerHTML = `
             <div class="widget widget-hidden" id="widget-content">
                 <nav class="widget-navigation">
                     <div class="widget-tabs" id="widgetTabs"></div>
@@ -68,15 +68,19 @@ export class Widget {
                 <div class="emoji-container" id="emojiContainer"></div>
             </div>
         `;
-        const searchButtonEL = mainEl.querySelector('#searchButton');
-        searchButtonEL.innerHTML = require(`./images/categories/search.svg`);
-        searchButtonEL.querySelector('svg').classList.add('search-icon');
+        const searchButtonEl = this.mainEl.querySelector('#searchButton');
 
-        this.inputEl.parentNode.insertBefore(mainEl, this.inputEl.nextSibling);
+        searchButtonEl.innerHTML = require(`./images/categories/search.svg`);
+        searchButtonEl.querySelector('svg').classList.add('search-icon');
+
+        this.inputEl.parentNode.insertBefore(this.mainEl, this.inputEl.nextSibling);
+        this.inputEl.parentNode.insertBefore(buttonEl, this.inputEl.nextSibling);
+
+        this.setTheme(this.theme);
 
         this.init();
 
-        return mainEl;
+        return this.mainEl;
     }
 
     init() {

@@ -1,5 +1,18 @@
 @import "sizes.styl";
 
+:root {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 100%;
+    background: var(--body-background);
+}
+
 .input-block {
     width: 800px;
     margin: 8px 0;
@@ -10,6 +23,8 @@
     width: 100%;
     display: inline-block;
     border: solid 1px #ccc;
+    background: var(--input-background);
+    color: var(--contrast);
     box-shadow: inset 0 1px 3px #ddd;
     border-radius: 4px;
     box-sizing: border-box;
@@ -17,4 +32,8 @@
     padding-bottom: $inputVerticalPadding;
     padding-left: $inputHorizontalPadding;
     padding-right: ($inputHorizontalPadding + $emojiSize)
+}
+
+.dark-mode-input {
+    color: var(--contrast);
 }
