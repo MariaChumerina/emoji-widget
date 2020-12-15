@@ -1,0 +1,16 @@
+{
+  "light": {
+    "--background": "#f2f2f2",
+    "--foreground-1": "#dcdcdc",
+    "--foreground-2": "#bbb",
+    "--contrast": "#252525",
+    "--accent": "#00a8ff"
+  },
+  "dark": {
+    "--background": "#393e46",
+    "--foreground-1": "#30353d",
+    "--foreground-2": "#484d55",
+    "--contrast": "#bbb",
+    "--accent": "#00a8ff"
+  }
+}

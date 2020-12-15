@@ -1,8 +1,24 @@
+import './styles/widget.styl';
+import './styles/theming.css';
+
 export class Widget {
-    create(inputEl, config = {}) {
+
+    create(inputEl, config = { darkMode: true }) {
         return new Promise((resolve, reject) => {
             this.inputEl = inputEl;
-            const { data, categories } = config;
+            const { data, categories, theming, darkMode } = config;
+            const theme = darkMode ? 'dark': 'light';
+
+            if (theming) {
+                this.theming = theming;
+                this.setTheme(theme);
+            } else {
+                import('./data/theming').then(res => {
+                    this.theming = res.default;
+                    this.setTheme(theme);
+                });
+            }
+
             if (data && categories) {
                 this.emojiList = data;
                 this.categoriesData = categories;
@@ -24,6 +40,17 @@ export class Widget {
         });
     }
 
+    setTheme(theme) {
+        const selectedTheme = this.theming[theme];
+        const root = document.documentElement;
+
+        if (selectedTheme) {
+            Object.keys(selectedTheme).forEach(themeVar => {
+                root.style.setProperty(themeVar, selectedTheme[themeVar]);
+            });
+        }
+    }
+
     renderAfter() {
         const mainEl = document.createElement('article');
 
@@ -35,12 +62,16 @@ export class Widget {
                     <div class="widget-tabs" id="widgetTabs"></div>
                     <div class="search-field">
                         <input class="search-input" id="search-input" placeholder="Поиск Emoji">
-                        <button class="search-button"></button>
+                        <button class="search-button" id="searchButton"></button>
                     </div>
                 </nav>
                 <div class="emoji-container" id="emojiContainer"></div>
             </div>
         `;
+        const searchButtonEL = mainEl.querySelector('#searchButton');
+        searchButtonEL.innerHTML = require(`./images/categories/search.svg`);
+        searchButtonEL.querySelector('svg').classList.add('search-icon');
+
         this.inputEl.parentNode.insertBefore(mainEl, this.inputEl.nextSibling);
 
         this.init();
@@ -130,6 +161,4 @@ export class Widget {
             emojiContainerEl.appendChild(emojiEl);
         });
     }
-
-
 }

@@ -1,7 +1,53 @@
 :root {
-    --background-color: #f2f2f2;
+    --background: #f2f2f2;
+    --foreground-1: #dcdcdc;
+    --foreground-2: #5a5a5a;
+    --contrast: #252525;
+    --accent: #0277bd;
 }
 
-.widget {
-    background: var(--background-color);
+.widget,
+.search-input {
+    background: var(--background);
+}
+
+.search-input {
+    border: solid 1px var(--foreground-2);
+}
+
+.emoji-button:hover,
+.emoji-button:target,
+.emoji-button:focus {
+    background: var(--foreground-1);
+}
+
+.search-input {
+    color: var(--contrast);
+}
+
+.search-icon {
+    fill: var(--contrast);
+}
+
+.tab-icon {
+    fill: var(--contrast);
+}
+
+.tab-item.selected > .tab-icon {
+    fill: var(--accent);
+}
+
+/* Firefox */
+.widget * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--foreground-2) var(--foreground-1);  /*blue кнопка, orange фон*/
+}
+
+.widget *::-webkit-scrollbar-track {
+    background: var(--foreground-1);
+}
+
+.widget *::-webkit-scrollbar-thumb {
+    background-color: var(--foreground-2);
+    border: 2px solid var(--foreground-1);
 }
