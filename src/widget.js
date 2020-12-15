@@ -30,7 +30,7 @@ export class Widget {
                 <nav class="widget-navigation">
                     <div class="widget-tabs" id="widgetTabs"></div>
                     <div class="search-field">
-                        <input class="search-input" placeholder="Поиск Emoji">
+                        <input class="search-input" id="search-input" placeholder="Поиск Emoji">
                         <button class="search-button"></button>
                     </div>
                 </nav>
@@ -48,6 +48,7 @@ export class Widget {
         this.initWidgetVisibility();
         this.initTabs();
         this.showPageByCategory(Number(DEFAULT_CATEGORY));
+        this.setEmojiSearch();
     }
 
     initWidgetVisibility() {
@@ -89,12 +90,30 @@ export class Widget {
 
     setSelectedCategory(index) {
         this.widgetButtonElList.forEach(el => el.classList.remove('selected'));
-        this.widgetButtonElList[index].classList.add('selected');
+        this.widgetButtonElList[index]?.classList.add('selected');
+    }
+
+    setEmojiSearch() {
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', (e) => {
+            const { value } = e.target;
+            const regexp = new RegExp(`\\b${value}`, 'i');
+            const emojis = this.emojiList.filter(c => c.name.match(regexp));
+            if (value.length > 0) {
+                this.setSelectedCategory(-1);
+            }
+            this.showEmoji(emojis);
+        });
     }
 
     showPageByCategory(categoryId) {
         const index = Object.keys(this.categoriesData).indexOf(categoryId.toString());
         const emojiListContent = this.emojiList.filter(e => e.category === categoryId);
+        this.showEmoji(emojiListContent);
+        this.setSelectedCategory(index);
+    }
+
+    showEmoji(emojiListContent) {
         const emojiContainerEl = document.getElementById('emojiContainer');
 
         emojiContainerEl.innerHTML = '';
@@ -104,11 +123,11 @@ export class Widget {
             emojiEl.innerHTML = emoji.html;
             emojiEl.setAttribute('title', emoji.name);
             emojiEl.addEventListener('click', () => {
-               this.inputEl.value += emoji.emoji;
+                this.inputEl.value += emoji.emoji;
             });
             emojiContainerEl.appendChild(emojiEl);
         });
-
-        this.setSelectedCategory(index);
     }
+
+
 }
