@@ -13,8 +13,6 @@
     border: solid 1px $inputBorderColor;
     box-shadow: inset 0 1px 3px #ddd;
     border-radius: 4px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding-top: $inputVerticalPadding;
     padding-bottom: $inputVerticalPadding;
@@ -46,8 +44,12 @@
     outline: none;
 }
 
-.widget-button:hover {
-    opacity: 1;
+.widget-button {
+    &:hover,
+    &:target,
+    &:focus {
+        opacity: 1;
+    }
 }
 
 .widget-button-position {
@@ -77,11 +79,13 @@
             outline: none;
             cursor: pointer;
 
-            &:hover {
+            &:hover,
+            &:target,
+            &:focus {
                 opacity: 0.4;
             }
 
-            &.selected > svg {
+            &.selected > .tab-icon {
                 fill: $accentColor;
             }
         }
@@ -115,7 +119,9 @@
             outline: none;
             margin-left: -24px;
 
-            &:hover {
+            &:hover,
+            &:target,
+            &:focus {
                 opacity: 0.2;
             }
         }
@@ -126,18 +132,23 @@
     display: grid;
     grid-template-columns: repeat(9, 32px);
     grid-auto-rows: 32px;
-    width: calc(100% + 17px);
+    width: "calc(100% + %s)" % $scrollbarWidth;
     height: 190px;
     overflow: hidden scroll;
     font-size: 18px;
 
-    &> span {
-        cursor: pointer;
-        line-height: 32px;
-        text-align: center;
+    .emoji-button {
+        width: 32px;
         border-radius: 2px;
+        background: none;
+        border: none;
+        font-size: 16px;
+        padding 0;
 
-        &:hover {
+        &:hover,
+        &:target,
+        &:focus {
+            outline: none;
             background: darken($backgroundColor, 5);
         }
     }
