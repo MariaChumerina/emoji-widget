@@ -1,13 +1,27 @@
+import './styles/widget.styl';
+import './styles/theming.css';
+
 export class Widget {
-    create(inputEl, config = {}) {
+
+    create(inputEl, config = { darkMode: false }) {
         return new Promise((resolve, reject) => {
+            const { data, categories, theming, darkMode } = config;
             this.inputEl = inputEl;
-            const { data, categories } = config;
+            this.theme = darkMode ? 'dark': 'light';
+
+            if (theming) {
+                this.theming = theming;
+            } else {
+                import('./data/theming').then(res => {
+                    this.theming = res.default;
+                });
+            }
+
             if (data && categories) {
                 this.emojiList = data;
                 this.categoriesData = categories;
 
-                resolve(this.renderAfter());
+                resolve(this.render());
             } else {
                 Promise.all([
                     import('./data/emojis'),
@@ -17,35 +31,56 @@ export class Widget {
                     this.emojiList = data.emojis;
                     this.categoriesData = categoriesData.default;
 
-                    resolve(this.renderAfter());
+                    resolve(this.render());
                 })
                 .catch(reject)
             }
         });
     }
 
-    renderAfter() {
-        const mainEl = document.createElement('article');
+    setTheme(theme) {
+        const selectedTheme = this.theming[theme];
 
-        mainEl.innerHTML = `
-            <button type="button" class="widget-button widget-button-position" id="widget-button">
-            </button>
+        if (selectedTheme) {
+            Object.keys(selectedTheme).forEach(themeVar => {
+                this.mainEl.style.setProperty(themeVar, selectedTheme[themeVar]);
+            });
+        }
+    }
+
+    render() {
+        this.mainEl = document.createElement('article');
+        const buttonEl = document.createElement('button');
+
+        this.mainEl.classList.add('widget-container');
+        buttonEl.classList.add('widget-button', 'widget-button-position');
+        buttonEl.setAttribute('id', 'widget-button');
+
+        this.mainEl.innerHTML = `
             <div class="widget widget-hidden" id="widget-content">
                 <nav class="widget-navigation">
                     <div class="widget-tabs" id="widgetTabs"></div>
                     <div class="search-field">
                         <input class="search-input" id="search-input" placeholder="Поиск Emoji">
-                        <button class="search-button"></button>
+                        <button class="search-button" id="searchButton"></button>
                     </div>
                 </nav>
                 <div class="emoji-container" id="emojiContainer"></div>
             </div>
         `;
-        this.inputEl.parentNode.insertBefore(mainEl, this.inputEl.nextSibling);
+        const searchButtonEl = this.mainEl.querySelector('#searchButton');
+
+        searchButtonEl.innerHTML = require(`./images/categories/search.svg`);
+        searchButtonEl.querySelector('svg').classList.add('search-icon');
+
+        this.inputEl.parentNode.insertBefore(this.mainEl, this.inputEl.nextSibling);
+        this.inputEl.parentNode.insertBefore(buttonEl, this.inputEl.nextSibling);
+
+        this.setTheme(this.theme);
 
         this.init();
 
-        return mainEl;
+        return this.mainEl;
     }
 
     init() {
@@ -130,6 +165,4 @@ export class Widget {
             emojiContainerEl.appendChild(emojiEl);
         });
     }
-
-
 }

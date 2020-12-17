@@ -1,0 +1,150 @@
+@import "sizes.styl";
+
+.widget-container {
+  position: absolute;
+  right: 0;
+}
+
+.widget {
+  width: 300px;
+  float: right;
+  padding: 15px $widgetHorizontalIndent;
+  border-radius: 0 0 5px 5px;
+}
+
+.widget-button {
+  background: url('../images/main-emodji.svg');
+  background-repeat: no-repeat;
+  background-size: $emojiSize $emojiSize;
+  height: $emojiSize;
+  width: $emojiSize;
+  opacity: .6;
+  border: none;
+  font-size: $emojiSize;
+  cursor: pointer;
+}
+
+.widget-button:focus {
+  outline: none;
+}
+
+.widget-button {
+  &:hover,
+  &:target,
+  &:focus {
+    opacity: 1;
+  }
+}
+
+.widget-button-position {
+  position: absolute;
+  right: ($inputVerticalPadding / 2);
+  top: ($inputVerticalPadding / 2);
+}
+
+.widget-hidden {
+  display: none;
+  transition: opacity 150ms ease-in-out,visibility 150ms ease-in-out 150ms;
+}
+
+.widget-navigation {
+  margin-bottom: 20px;
+
+  .widget-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    .tab-item {
+      width: 32px;
+      height: 20px;
+      opacity: .7;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background: none;
+
+      &:hover,
+      &:target,
+      &:focus {
+        opacity: 0.4;
+      }
+    }
+  }
+
+  .search-field {
+    display: flex;
+    align-items: center;
+
+    .search-input {
+      width: 100%;
+      border-radius: 2px;
+      box-sizing: border-box;
+      padding: 4px 6px;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+    }
+
+    .search-button {
+      background: none;
+      border: none;
+      width: 20px;
+      height: 20px;
+      opacity: .3;
+      cursor: pointer;
+      outline: none;
+      margin-left: -24px;
+      padding: 0;
+
+      &:hover,
+      &:target,
+      &:focus {
+        opacity: 0.2;
+      }
+    }
+  }
+}
+
+.emoji-container {
+  display: grid;
+  grid-template-columns: repeat(9, 32px);
+  grid-auto-rows: 32px;
+  width: "calc(100% + %s)" % ($widgetHorizontalIndent - 4px);
+  height: 190px;
+  overflow: hidden scroll;
+  font-size: 18px;
+
+  .emoji-button {
+    width: 32px;
+    border-radius: 2px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding 0;
+
+    &:hover,
+    &:target,
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+
+/* Firefox */
+.widget * {
+  scrollbar-width: thin;
+}
+
+/* Chrome, Edge, Safari */
+.widget *::-webkit-scrollbar {
+  width: 12px;
+}
+
+.widget *::-webkit-scrollbar-track,
+.widget *::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+}
