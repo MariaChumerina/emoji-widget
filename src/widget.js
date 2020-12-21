@@ -7,6 +7,7 @@ export class Widget {
         return new Promise((resolve, reject) => {
             const { data, categories, theming, darkMode } = config;
             this.inputEl = inputEl;
+            this.recentlyUsed = [];
             this.theme = darkMode ? 'dark': 'light';
 
             if (theming) {
@@ -105,6 +106,7 @@ export class Widget {
     }
 
     initTabs() {
+        const DEFAULT_CATEGORY = Object.keys(this.categoriesData)[0];
         const widgetTabsEl = document.getElementById('widgetTabs');
 
         Object.keys(this.categoriesData).forEach((categoryId, index) => {
@@ -115,7 +117,12 @@ export class Widget {
             tabButtonEl.classList.add('tab-item');
             tabButtonEl.innerHTML = require(`./images/categories/cat-${categoryId}.svg`);
             tabButtonEl.addEventListener('click', () => {
-                this.showPageByCategory(Number(categoryId));
+                if (categoryId === DEFAULT_CATEGORY) {
+                    this.showEmoji(this.recentlyUsed);
+                    this.setSelectedCategory(categoryId);
+                } else {
+                    this.showPageByCategory(Number(categoryId));
+                }
             });
 
             tabButtonEl.querySelector('svg').classList.add('tab-icon');
@@ -150,6 +157,7 @@ export class Widget {
     }
 
     showEmoji(emojiListContent) {
+        const RECENTLY_USED_LENGTH = 54;
         const emojiContainerEl = document.getElementById('emojiContainer');
 
         emojiContainerEl.innerHTML = '';
@@ -161,6 +169,12 @@ export class Widget {
             emojiEl.setAttribute('title', emojiItem.name);
             emojiEl.addEventListener('click', () => {
                 this.inputEl.value += emojiItem.emoji;
+                if (!this.recentlyUsed.includes(emojiItem)) {
+                    this.recentlyUsed.unshift(emojiItem);
+                }
+                if (this.recentlyUsed.length > RECENTLY_USED_LENGTH) {
+                    this.recentlyUsed.pop();
+                }
             });
             emojiContainerEl.appendChild(emojiEl);
         });
