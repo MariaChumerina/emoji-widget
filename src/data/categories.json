@@ -1,4 +1,8 @@
 {
+  "0": {
+    "name": "favorite",
+    "title": "Recently used"
+  },
   "1": {
     "name": "smiles",
     "title": "Smileys & People"
