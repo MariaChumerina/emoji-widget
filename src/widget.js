@@ -156,6 +156,17 @@ export class Widget {
         this.setSelectedCategory(index);
     }
 
+    insertEmoji(emoji) {
+        const value = this.inputEl.value;
+        const startPos = this.inputEl.selectionStart;
+        const endPos = this.inputEl.selectionEnd;
+        const caretDiff = endPos + emoji.length;
+
+        this.inputEl.value = `${value.substring(0, startPos)}${emoji}${value.substring(endPos)}`;
+        this.inputEl.focus();
+        this.inputEl.setSelectionRange(caretDiff, caretDiff);
+    }
+
     showEmoji(emojiListContent) {
         const RECENTLY_USED_LENGTH = 54;
         const emojiContainerEl = document.getElementById('emojiContainer');
@@ -168,7 +179,8 @@ export class Widget {
             emojiEl.innerHTML = emojiItem.html;
             emojiEl.setAttribute('title', emojiItem.name);
             emojiEl.addEventListener('click', () => {
-                this.inputEl.value += emojiItem.emoji;
+                this.insertEmoji(emojiItem.emoji);
+
                 if (!this.recentlyUsed.includes(emojiItem)) {
                     this.recentlyUsed.unshift(emojiItem);
                 }
